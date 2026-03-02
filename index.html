@@ -390,6 +390,7 @@ body::before {
   opacity: 1;
   visibility: visible;
   transition: opacity 0.45s ease, visibility 0.45s ease;
+  animation: splashAutoHide 0.5s ease 1.2s forwards;
 }
 .app-splash.hidden {
   opacity: 0;
@@ -448,6 +449,13 @@ body.intro-hidden .wrap {
   0%, 100% { opacity: 0.4; transform: scaleX(0.9); }
   50% { opacity: 1; transform: scaleX(1); }
 }
+@keyframes splashAutoHide {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .splash-box,
   .splash-line {
@@ -455,6 +463,7 @@ body.intro-hidden .wrap {
   }
   .app-splash {
     transition: none;
+    animation: none;
   }
 }
 
@@ -473,7 +482,7 @@ body.intro-hidden .wrap {
 <body>
 <div class="app-splash" id="appSplash" aria-hidden="true">
   <div class="splash-box">
-    
+    <img class="splash-logo" src="./assets/logo-wide.png" alt="Binary Risk Manager logo" onerror="this.style.display='none'"/>
     <div class="splash-eyebrow">binary options</div>
     <div class="splash-title">RISK <span>MANAGER</span></div>
     <div class="splash-line"></div>
@@ -1080,4 +1089,3 @@ if ('serviceWorker' in navigator) {
 </script>
 </body>
 </html>
-

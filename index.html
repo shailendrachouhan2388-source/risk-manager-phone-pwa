@@ -47,7 +47,7 @@ body::before {
 
 .wrap { max-width:520px; margin:0 auto; padding:20px 16px 60px; position:relative; z-index:1; }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ HEADER Ã¢â€â‚¬Ã¢â€â‚¬ */
+/*  HEADER  */
 .header {
   text-align:center;
   padding:28px 0 22px;
@@ -80,7 +80,7 @@ body::before {
   background:linear-gradient(90deg,transparent,var(--gold),transparent);
 }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ ACCOUNT SETUP Ã¢â€â‚¬Ã¢â€â‚¬ */
+/*  ACCOUNT SETUP  */
 .setup-card {
   background:var(--bg2);
   border:1px solid var(--border);
@@ -169,7 +169,7 @@ body::before {
 .start-btn:hover { transform:translateY(-1px); box-shadow:0 6px 24px rgba(240,180,41,0.35); }
 .start-btn:active { transform:translateY(0); }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ ACCOUNT STATUS BAR Ã¢â€â‚¬Ã¢â€â‚¬ */
+/*  ACCOUNT STATUS BAR  */
 .account-bar {
   background:var(--bg2);
   border:1px solid var(--border);
@@ -198,7 +198,7 @@ body::before {
 .ab-meta-item { font-family:'JetBrains Mono', monospace; font-size:9px; color:var(--text2); }
 .ab-meta-item span { color:var(--text3); }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ NEXT TRADE BOX Ã¢â€â‚¬Ã¢â€â‚¬ */
+/*  NEXT TRADE BOX  */
 .trade-box {
   background:var(--bg2);
   border:2px solid var(--border);
@@ -301,7 +301,7 @@ body::before {
 }
 .reset-btn:hover { border-color:var(--text2); color:var(--text); }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ STOP LOSS ALERT Ã¢â€â‚¬Ã¢â€â‚¬ */
+/*  STOP LOSS ALERT  */
 .stop-alert {
   background:rgba(240,57,74,0.08);
   border:1px solid #f0394a55;
@@ -314,7 +314,7 @@ body::before {
 .stop-alert-title { font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700; color:var(--red); letter-spacing:2px; margin-bottom:8px; }
 .stop-alert-msg { font-size:13px; color:var(--text3); line-height:1.6; }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ SESSION HISTORY Ã¢â€â‚¬Ã¢â€â‚¬ */
+/*  SESSION HISTORY  */
 .history-section {
   background:var(--bg2);
   border:1px solid var(--border);
@@ -336,7 +336,7 @@ body::before {
 .hist-balance { font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--text3); }
 .hist-pnl { font-family:'JetBrains Mono', monospace; font-size:11px; font-weight:700; min-width:60px; text-align:right; }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ GROWTH CHART Ã¢â€â‚¬Ã¢â€â‚¬ */
+/*  GROWTH CHART  */
 .chart-wrap {
   background:var(--bg2);
   border:1px solid var(--border);
@@ -346,7 +346,7 @@ body::before {
 }
 .chart-wrap.visible { display:block; }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ STRATEGY INFO PANEL Ã¢â€â‚¬Ã¢â€â‚¬ */
+/*  STRATEGY INFO PANEL  */
 .info-panel {
   background:var(--bg2);
   border:1px solid var(--border);
@@ -362,7 +362,7 @@ body::before {
 .info-item-label { font-family:'JetBrains Mono', monospace; font-size:8px; letter-spacing:2px; color:var(--text2); margin-bottom:4px; }
 .info-item-val { font-size:12px; color:var(--text3); line-height:1.5; }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ DISCLAIMER Ã¢â€â‚¬Ã¢â€â‚¬ */
+/*  DISCLAIMER  */
 .disclaimer {
   font-family:'JetBrains Mono', monospace;
   font-size:9px; color:var(--text2);
@@ -372,7 +372,11 @@ body::before {
   background:rgba(240,57,74,0.03);
 }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ ANIMATIONS Ã¢â€â‚¬Ã¢â€â‚¬ */
+.watermark-name {
+  color: var(--gold);
+  font-weight: 700;
+}
+/*  ANIMATIONS  */
 @keyframes fadein { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 @keyframes pulse-gold { 0%,100%{box-shadow:0 0 0 0 rgba(240,180,41,0)} 50%{box-shadow:0 0 20px 4px rgba(240,180,41,0.15)} }
 .fade-in { animation:fadein 0.4s ease; }
@@ -389,15 +393,15 @@ body::before {
 
   <!-- HEADER -->
   <div class="header">
-    <div class="header-eyebrow">Ã¢â€”Ë† binary options Ã¢â€”Ë†</div>
+    <div class="header-eyebrow"> binary options </div>
     <div class="header-title">RISK <span>MANAGER</span></div>
-    <div class="header-sub">SMART POSITION SIZING Ã¢â‚¬Â¢ ACCOUNT GROWTH</div>
+    <div class="header-sub">SMART POSITION SIZING  ACCOUNT GROWTH</div>
     <div class="header-glow"></div>
   </div>
 
   <!-- SETUP CARD -->
   <div class="setup-card" id="setupCard">
-    <div class="card-title">Ã¢â€”Ë† Account Setup</div>
+    <div class="card-title"> Account Setup</div>
 
     <div class="input-row">
       <div class="input-group">
@@ -422,27 +426,27 @@ body::before {
         <input class="input-field" id="minTradeInput" type="number" min="1" value="1" placeholder="1"/>
       </div>
     </div>
-    <div class="card-title" style="margin-top:4px;">Ã¢â€”Ë† Risk Strategy</div>
+    <div class="card-title" style="margin-top:4px;"> Risk Strategy</div>
     <div class="strategy-grid" id="strategyGrid">
       <button class="strat-btn active" data-strat="conservative" onclick="selectStrat(this)">
-        <span class="strat-name">Ã°Å¸â€ºÂ¡ Conservative</span>
-        <span class="strat-desc">1Ã¢â‚¬â€œ2% per trade. Safest growth.</span>
+        <span class="strat-name"> Conservative</span>
+        <span class="strat-desc">1-2% per trade. Safest growth.</span>
       </button>
       <button class="strat-btn" data-strat="moderate" onclick="selectStrat(this)">
-        <span class="strat-name">Ã¢Å¡â€“ Moderate</span>
-        <span class="strat-desc">2Ã¢â‚¬â€œ5% per trade. Balanced risk.</span>
+        <span class="strat-name"> Moderate</span>
+        <span class="strat-desc">2-5% per trade. Balanced risk.</span>
       </button>
       <button class="strat-btn" data-strat="aggressive" onclick="selectStrat(this)">
-        <span class="strat-name">Ã¢Å¡Â¡ Aggressive</span>
-        <span class="strat-desc">5Ã¢â‚¬â€œ10% per trade. Fast growth.</span>
+        <span class="strat-name"> Aggressive</span>
+        <span class="strat-desc">5-10% per trade. Fast growth.</span>
       </button>
       <button class="strat-btn" data-strat="martingale" onclick="selectStrat(this)">
-        <span class="strat-name">Ã°Å¸â€â€ž Anti-Martingale</span>
+        <span class="strat-name"> Anti-Martingale</span>
         <span class="strat-desc">Double on WIN. Reset on loss.</span>
       </button>
     </div>
 
-    <button class="start-btn" onclick="startSession()">Ã¢Å¡Â¡ START SESSION</button>
+    <button class="start-btn" onclick="startSession()"> START SESSION</button>
   </div>
 
   <!-- ACCOUNT STATUS BAR -->
@@ -470,10 +474,10 @@ body::before {
 
   <!-- TARGET ACHIEVED -->
   <div class="stop-alert" id="targetAlert" style="background:rgba(34,208,122,0.08);border-color:#22d07a55;">
-    <div class="stop-alert-icon">Ã°Å¸Ââ€ </div>
+    <div class="stop-alert-icon"></div>
     <div class="stop-alert-title" style="color:var(--green)">TARGET REACHED!</div>
     <div class="stop-alert-msg" id="targetAlertMsg">Congratulations! You hit your profit target. Consider withdrawing profits or starting a new session.</div>
-    <button class="reset-btn" style="margin-top:14px;" onclick="resetSession()">Ã¢â€ Âº Start New Session</button>
+    <button class="reset-btn" style="margin-top:14px;" onclick="resetSession()"> Start New Session</button>
   </div>
 
   <!-- NEXT TRADE BOX -->
@@ -503,44 +507,44 @@ body::before {
     </div>
 
     <div class="tb-advice">
-      <div class="tb-advice-title">Ã¢â€”Ë† AI ADVICE</div>
+      <div class="tb-advice-title"> AI ADVICE</div>
       <div class="tb-advice-text" id="tbAdvice">Loading recommendation...</div>
     </div>
 
     <div class="outcome-row" style="margin-bottom:10px;">
-      <button class="win-btn" onclick="recordOutcome('WIN')">Ã¢Å“â€¦ WIN</button>
-      <button class="loss-btn" onclick="recordOutcome('LOSS')">Ã¢ÂÅ’ LOSS</button>
+      <button class="win-btn" onclick="recordOutcome('WIN')"> WIN</button>
+      <button class="loss-btn" onclick="recordOutcome('LOSS')"> LOSS</button>
     </div>
-    <button class="reset-btn" onclick="resetSession()">Ã¢â€ Âº Reset Session</button>
+    <button class="reset-btn" onclick="resetSession()"> Reset Session</button>
   </div>
 
   <!-- GROWTH CHART -->
   <div class="chart-wrap" id="chartWrap">
-    <div class="card-title">Ã¢â€”Ë† Balance Growth Curve</div>
+    <div class="card-title"> Balance Growth Curve</div>
     <canvas id="growthChart" style="width:100%;display:block;" height="90"></canvas>
   </div>
 
   <!-- SESSION HISTORY -->
   <div class="history-section" id="historySection">
-    <div class="card-title">Ã¢â€”Ë† Session History</div>
+    <div class="card-title"> Session History</div>
     <div id="historyList"></div>
   </div>
 
   <!-- STRATEGY INFO -->
   <div class="info-panel" id="infoPanel" style="display:none;">
-    <div class="card-title">Ã¢â€”Ë† Strategy Rules</div>
+    <div class="card-title"> Strategy Rules</div>
     <div class="info-grid" id="infoGrid"></div>
   </div>
   <div class="disclaimer">
     FOR EDUCATIONAL USE ONLY - This tool provides position sizing guidance based on mathematical risk models. Past results do not guarantee future performance. Binary options carry extreme risk of capital loss. Always trade responsibly.
-    <br/>This is created by Shailendra Chouhan for personal use.
+    <br/>This is created by <span class="watermark-name">Shailendra Chouhan</span> for personal use.
     <br/>According to your deposit, you can grow your account in small steps. Take your first trade and mark it as win or loss. This bot will tell you your next trade strategy and the amount for your next trade according to your capital size.
   </div>
 
 </div>
 
 <script>
-// Ã¢â€â‚¬Ã¢â€â‚¬ STATE Ã¢â€â‚¬Ã¢â€â‚¬
+//  STATE 
 let state = {
   active: false,
   deposit: 100,
@@ -556,10 +560,10 @@ let state = {
   balanceHistory: []
 };
 
-// Ã¢â€â‚¬Ã¢â€â‚¬ STRATEGY CONFIGS Ã¢â€â‚¬Ã¢â€â‚¬
+//  STRATEGY CONFIGS 
 const STRATEGIES = {
   conservative: {
-    name: 'Ã°Å¸â€ºÂ¡ Conservative',
+    name: ' Conservative',
     basePct: 1.5,
     maxPct: 2,
     onWin: (s) => s.basePct,           // reset to base on win
@@ -574,7 +578,7 @@ const STRATEGIES = {
     ]
   },
   moderate: {
-    name: 'Ã¢Å¡â€“ Moderate',
+    name: ' Moderate',
     basePct: 3,
     maxPct: 5,
     onWin: (s) => s.basePct,
@@ -589,7 +593,7 @@ const STRATEGIES = {
     ]
   },
   aggressive: {
-    name: 'Ã¢Å¡Â¡ Aggressive',
+    name: ' Aggressive',
     basePct: 7,
     maxPct: 10,
     onWin: (s) => s.basePct,
@@ -604,7 +608,7 @@ const STRATEGIES = {
     ]
   },
   martingale: {
-    name: 'Ã°Å¸â€â€ž Anti-Martingale',
+    name: ' Anti-Martingale',
     basePct: 2,
     maxPct: 8,
     onWin: (s, pct) => Math.min(pct * 2, s.maxPct), // double on win
@@ -628,7 +632,7 @@ function selectStrat(el) {
   selectedStrat = el.dataset.strat;
 }
 
-// Ã¢â€â‚¬Ã¢â€â‚¬ START SESSION Ã¢â€â‚¬Ã¢â€â‚¬
+//  START SESSION 
 function startSession() {
   const deposit = parseFloat(document.getElementById('depositInput').value) || 100;
   const payout  = parseFloat(document.getElementById('payoutInput').value)  || 92;
@@ -660,7 +664,7 @@ function startSession() {
   renderStrategyInfo();
 }
 
-// Ã¢â€â‚¬Ã¢â€â‚¬ COMPUTE NEXT TRADE Ã¢â€â‚¬Ã¢â€â‚¬
+//  COMPUTE NEXT TRADE 
 function computeNextTrade() {
   const strat = STRATEGIES[state.strategy];
   const bal = state.balance;
@@ -711,16 +715,16 @@ function buildAdvice(pct, level, profit, amount) {
   const stopLevel = state.deposit * (1 - state.stopLossPct / 100);
   const distToStop = ((bal - stopLevel) / state.deposit * 100).toFixed(1);
 
-  if (l >= 3) return `Ã¢Å¡Â Ã¯Â¸Â ${l} losses in a row. In binary trading each loss is 100% of trade amount Ã¢â‚¬â€ SKIP this trade! Wait for a very strong signal or stop for today.`;
-  if (w >= 3 && state.strategy === 'martingale') return `Ã°Å¸â€Â¥ ${w} wins in a row! Amount doubled to $${amount.toFixed(2)}. Consider taking some profits soon.`;
-  if (w >= 2) return `Ã¢Å“â€¦ ${w} consecutive wins. Momentum is good. Stick to the plan, do not increase risk manually.`;
-  if (level === 'danger') return `Ã¢Å¡Â¡ High risk trade at ${pct.toFixed(1)}% of balance. Only enter on strong signal with 2+ indicator confirmation.`;
-  if (level === 'caution') return `Ã¢Å¡â€“ Medium risk at ${pct.toFixed(1)}%. Acceptable if your signal confidence is above 70%.`;
-  if (distToStop < 10) return `Ã°Å¸â€ºâ€˜ WARNING: Only ${distToStop}% above your daily loss limit ($${stopLevel.toFixed(2)}). In binary options each trade is full risk Ã¢â‚¬â€ consider stopping for today.`;
-  return `Ã¢Å“â€¦ Safe trade size at ${pct.toFixed(1)}% of balance. Good risk management. Enter on a clear signal only.`;
+  if (l >= 3) return ` ${l} losses in a row. In binary trading each loss is 100% of trade amount - SKIP this trade! Wait for a very strong signal or stop for today.`;
+  if (w >= 3 && state.strategy === 'martingale') return ` ${w} wins in a row! Amount doubled to $${amount.toFixed(2)}. Consider taking some profits soon.`;
+  if (w >= 2) return ` ${w} consecutive wins. Momentum is good. Stick to the plan, do not increase risk manually.`;
+  if (level === 'danger') return ` High risk trade at ${pct.toFixed(1)}% of balance. Only enter on strong signal with 2+ indicator confirmation.`;
+  if (level === 'caution') return ` Medium risk at ${pct.toFixed(1)}%. Acceptable if your signal confidence is above 70%.`;
+  if (distToStop < 10) return ` WARNING: Only ${distToStop}% above your daily loss limit ($${stopLevel.toFixed(2)}). In binary options each trade is full risk - consider stopping for today.`;
+  return ` Safe trade size at ${pct.toFixed(1)}% of balance. Good risk management. Enter on a clear signal only.`;
 }
 
-// Ã¢â€â‚¬Ã¢â€â‚¬ RECORD OUTCOME Ã¢â€â‚¬Ã¢â€â‚¬
+//  RECORD OUTCOME 
 function recordOutcome(outcome) {
   const strat = STRATEGIES[state.strategy];
   const amount = state._nextAmount || (state.balance * strat.basePct / 100);
@@ -757,7 +761,7 @@ function recordOutcome(outcome) {
   computeNextTrade();
 }
 
-// Ã¢â€â‚¬Ã¢â€â‚¬ ACCOUNT BAR Ã¢â€â‚¬Ã¢â€â‚¬
+//  ACCOUNT BAR 
 function updateAccountBar() {
   const growth = ((state.balance - state.deposit) / state.deposit * 100).toFixed(2);
   const targetBal = state.deposit * (1 + state.targetPct / 100);
@@ -776,16 +780,16 @@ function updateAccountBar() {
   document.getElementById('metaWL').textContent = wins + '/' + losses;
 }
 
-// Ã¢â€â‚¬Ã¢â€â‚¬ TARGET Ã¢â€â‚¬Ã¢â€â‚¬
+//  TARGET 
 function triggerTarget() {
   document.getElementById('tradeBox').classList.remove('visible');
   document.getElementById('targetAlert').classList.add('visible');
   const growth = ((state.balance - state.deposit) / state.deposit * 100).toFixed(1);
   document.getElementById('targetAlertMsg').textContent =
-    `You grew your account from $${state.deposit.toFixed(2)} to $${state.balance.toFixed(2)} Ã¢â‚¬â€ a ${growth}% gain in ${state.trades.length} trades! Lock in your profits.`;
+    `You grew your account from $${state.deposit.toFixed(2)} to $${state.balance.toFixed(2)} - a ${growth}% gain in ${state.trades.length} trades! Lock in your profits.`;
 }
 
-// Ã¢â€â‚¬Ã¢â€â‚¬ RENDER HISTORY Ã¢â€â‚¬Ã¢â€â‚¬
+//  RENDER HISTORY 
 function renderHistory() {
   const sec = document.getElementById('historySection');
   const list = document.getElementById('historyList');
@@ -793,7 +797,7 @@ function renderHistory() {
 
   list.innerHTML = [...state.trades].reverse().slice(0, 20).map(t => {
     const c = t.outcome === 'WIN' ? '#22d07a' : '#f0394a';
-    const ico = t.outcome === 'WIN' ? 'Ã¢Å“â€¦' : 'Ã¢ÂÅ’';
+    const ico = t.outcome === 'WIN' ? '' : '';
     const sign = t.pnl >= 0 ? '+' : '';
     return `<div class="hist-row">
       <span class="hist-num">#${t.num}</span>
@@ -805,7 +809,7 @@ function renderHistory() {
   }).join('');
 }
 
-// Ã¢â€â‚¬Ã¢â€â‚¬ GROWTH CHART Ã¢â€â‚¬Ã¢â€â‚¬
+//  GROWTH CHART 
 function renderGrowthChart() {
   const wrap = document.getElementById('chartWrap');
   wrap.classList.add('visible');
@@ -873,7 +877,7 @@ function renderGrowthChart() {
   ctx.fillText('$' + lastVal.toFixed(2), W - pad.r - 2, ey - 5);
 }
 
-// Ã¢â€â‚¬Ã¢â€â‚¬ STRATEGY INFO Ã¢â€â‚¬Ã¢â€â‚¬
+//  STRATEGY INFO 
 function renderStrategyInfo() {
   const strat = STRATEGIES[state.strategy];
   document.getElementById('infoGrid').innerHTML = strat.rules.map(r => `
@@ -883,7 +887,7 @@ function renderStrategyInfo() {
     </div>`).join('');
 }
 
-// Ã¢â€â‚¬Ã¢â€â‚¬ RESET Ã¢â€â‚¬Ã¢â€â‚¬
+//  RESET 
 function resetSession() {
   document.getElementById('setupCard').style.display = 'block';
   document.getElementById('accountBar').classList.remove('visible');
@@ -897,7 +901,7 @@ function resetSession() {
 }
 
 
-// Ã¢â€â‚¬Ã¢â€â‚¬ INDEXEDDB PERSISTENT STORAGE Ã¢â€â‚¬Ã¢â€â‚¬
+//  INDEXEDDB PERSISTENT STORAGE 
 let db = null;
 
 function initDB() {

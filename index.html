@@ -1,0 +1,977 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Risk Manager">
+<meta name="theme-color" content="#0a0e1a">
+<title>Binary Risk Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #070a12;
+  --bg2:      #0d1220;
+  --bg3:      #111828;
+  --border:   #1e2d45;
+  --border2:  #263650;
+  --gold:     #f0b429;
+  --gold2:    #ffd666;
+  --green:    #22d07a;
+  --red:      #f0394a;
+  --blue:     #3b82f6;
+  --cyan:     #06b6d4;
+  --text:     #cbd5e1;
+  --text2:    #64748b;
+  --text3:    #94a3b8;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Space Grotesk', sans-serif;
+  min-height:100vh;
+  padding:0;
+  overflow-x:hidden;
+}
+
+/* NOISE TEXTURE OVERLAY */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:0; opacity:0.4;
+}
+
+.wrap { max-width:520px; margin:0 auto; padding:20px 16px 60px; position:relative; z-index:1; }
+
+/* â”€â”€ HEADER â”€â”€ */
+.header {
+  text-align:center;
+  padding:28px 0 22px;
+  margin-bottom:24px;
+  border-bottom:1px solid var(--border);
+  position:relative;
+}
+.header-eyebrow {
+  font-family:'JetBrains Mono', monospace;
+  font-size:10px; letter-spacing:5px;
+  color:var(--gold); opacity:0.7;
+  margin-bottom:10px;
+  text-transform:uppercase;
+}
+.header-title {
+  font-size:28px; font-weight:700;
+  letter-spacing:-0.5px;
+  color:#fff;
+  line-height:1.1;
+}
+.header-title span { color:var(--gold); }
+.header-sub {
+  font-family:'JetBrains Mono', monospace;
+  font-size:10px; color:var(--text2);
+  letter-spacing:2px; margin-top:8px;
+}
+.header-glow {
+  position:absolute; bottom:-1px; left:50%; transform:translateX(-50%);
+  width:120px; height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+
+/* â”€â”€ ACCOUNT SETUP â”€â”€ */
+.setup-card {
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:18px;
+}
+.card-title {
+  font-family:'JetBrains Mono', monospace;
+  font-size:10px; letter-spacing:3px;
+  color:var(--text2); margin-bottom:16px;
+  text-transform:uppercase;
+}
+.input-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+.input-group { display:flex; flex-direction:column; gap:6px; }
+.input-label {
+  font-family:'JetBrains Mono', monospace;
+  font-size:9px; letter-spacing:2px;
+  color:var(--text2); text-transform:uppercase;
+}
+.input-field {
+  background:var(--bg3);
+  border:1px solid var(--border);
+  color:#fff;
+  padding:11px 14px;
+  border-radius:8px;
+  font-size:15px;
+  font-family:'JetBrains Mono', monospace;
+  font-weight:700;
+  outline:none;
+  transition:border-color 0.2s, box-shadow 0.2s;
+  width:100%;
+}
+.input-field:focus {
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(240,180,41,0.1);
+}
+.input-prefix {
+  position:relative;
+}
+.input-prefix::before {
+  content:'$';
+  position:absolute; left:12px; top:50%; transform:translateY(-50%);
+  color:var(--gold); font-family:'JetBrains Mono', monospace;
+  font-size:15px; font-weight:700; z-index:1;
+}
+.input-prefix .input-field { padding-left:24px; }
+
+/* STRATEGY SELECTOR */
+.strategy-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+.strat-btn {
+  background:var(--bg3);
+  border:1px solid var(--border);
+  color:var(--text3);
+  padding:10px 8px;
+  border-radius:8px;
+  font-size:11px;
+  font-family:'JetBrains Mono', monospace;
+  cursor:pointer;
+  transition:all 0.2s;
+  text-align:center;
+  line-height:1.4;
+}
+.strat-btn:hover { border-color:var(--border2); color:var(--text); }
+.strat-btn.active {
+  background:rgba(240,180,41,0.1);
+  border-color:var(--gold);
+  color:var(--gold);
+}
+.strat-btn .strat-name { font-weight:700; font-size:11px; display:block; }
+.strat-btn .strat-desc { font-size:9px; color:var(--text2); display:block; margin-top:2px; }
+.strat-btn.active .strat-desc { color:var(--gold); opacity:0.7; }
+
+.start-btn {
+  width:100%;
+  background:linear-gradient(135deg, #b8860b, var(--gold), #ffd666);
+  border:none; color:#000;
+  padding:14px;
+  border-radius:10px;
+  font-size:14px; font-weight:700;
+  cursor:pointer; letter-spacing:1px;
+  font-family:'Space Grotesk', sans-serif;
+  transition:all 0.2s;
+  box-shadow:0 4px 20px rgba(240,180,41,0.25);
+}
+.start-btn:hover { transform:translateY(-1px); box-shadow:0 6px 24px rgba(240,180,41,0.35); }
+.start-btn:active { transform:translateY(0); }
+
+/* â”€â”€ ACCOUNT STATUS BAR â”€â”€ */
+.account-bar {
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px 16px;
+  margin-bottom:18px;
+  display:none;
+}
+.account-bar.visible { display:block; }
+.ab-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.ab-label { font-family:'JetBrains Mono', monospace; font-size:9px; letter-spacing:2px; color:var(--text2); }
+.ab-val { font-family:'JetBrains Mono', monospace; font-size:18px; font-weight:700; color:#fff; }
+.ab-val.up { color:var(--green); }
+.ab-val.down { color:var(--red); }
+.ab-progress-track {
+  background:var(--bg3);
+  border-radius:4px; height:6px; overflow:hidden;
+  margin-bottom:8px;
+}
+.ab-progress-fill {
+  height:100%; border-radius:4px;
+  background:linear-gradient(90deg, var(--gold), var(--gold2));
+  transition:width 0.8s ease;
+}
+.ab-meta { display:flex; justify-content:space-between; }
+.ab-meta-item { font-family:'JetBrains Mono', monospace; font-size:9px; color:var(--text2); }
+.ab-meta-item span { color:var(--text3); }
+
+/* â”€â”€ NEXT TRADE BOX â”€â”€ */
+.trade-box {
+  background:var(--bg2);
+  border:2px solid var(--border);
+  border-radius:16px;
+  padding:22px;
+  margin-bottom:18px;
+  display:none;
+  position:relative;
+  overflow:hidden;
+  transition:border-color 0.3s;
+}
+.trade-box.visible { display:block; }
+.trade-box::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.trade-box.safe { border-color:#22d07a44; }
+.trade-box.safe::before { background:linear-gradient(90deg, transparent, var(--green), transparent); }
+.trade-box.caution { border-color:#f0b42944; }
+.trade-box.caution::before { background:linear-gradient(90deg, transparent, var(--gold), transparent); }
+.trade-box.danger { border-color:#f0394a44; }
+.trade-box.danger::before { background:linear-gradient(90deg, transparent, var(--red), transparent); }
+.trade-box.stop { border-color:#f0394a88; background:rgba(240,57,74,0.05); }
+
+.tb-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px; }
+.tb-label { font-family:'JetBrains Mono', monospace; font-size:9px; letter-spacing:3px; color:var(--text2); margin-bottom:4px; }
+.tb-amount {
+  font-family:'JetBrains Mono', monospace;
+  font-size:42px; font-weight:700;
+  line-height:1; color:var(--gold);
+}
+.tb-amount-sub { font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--text2); margin-top:4px; }
+.tb-badge {
+  padding:6px 12px; border-radius:20px;
+  font-family:'JetBrains Mono', monospace;
+  font-size:10px; font-weight:700; letter-spacing:1px;
+}
+.tb-badge.safe { background:rgba(34,208,122,0.15); color:var(--green); border:1px solid #22d07a33; }
+.tb-badge.caution { background:rgba(240,180,41,0.15); color:var(--gold); border:1px solid #f0b42933; }
+.tb-badge.danger { background:rgba(240,57,74,0.15); color:var(--red); border:1px solid #f0394a33; }
+.tb-badge.stop { background:rgba(240,57,74,0.2); color:var(--red); border:1px solid #f0394a66; }
+
+.tb-stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:16px; }
+.tb-stat {
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:8px; padding:10px 10px;
+  text-align:center;
+}
+.tb-stat-label { font-family:'JetBrains Mono', monospace; font-size:8px; letter-spacing:2px; color:var(--text2); margin-bottom:5px; }
+.tb-stat-val { font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700; color:#fff; }
+
+.tb-advice {
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:10px; padding:12px 14px;
+  margin-bottom:14px;
+}
+.tb-advice-title { font-family:'JetBrains Mono', monospace; font-size:9px; letter-spacing:2px; color:var(--text2); margin-bottom:6px; }
+.tb-advice-text { font-size:13px; color:var(--text3); line-height:1.6; }
+
+/* OUTCOME BUTTONS */
+.outcome-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.win-btn {
+  background:rgba(34,208,122,0.1);
+  border:1px solid #22d07a44;
+  color:var(--green);
+  padding:14px; border-radius:10px;
+  font-size:14px; font-weight:700;
+  cursor:pointer;
+  font-family:'Space Grotesk', sans-serif;
+  letter-spacing:1px;
+  transition:all 0.2s;
+}
+.win-btn:hover { background:rgba(34,208,122,0.2); border-color:var(--green); box-shadow:0 0 20px rgba(34,208,122,0.2); }
+.loss-btn {
+  background:rgba(240,57,74,0.1);
+  border:1px solid #f0394a44;
+  color:var(--red);
+  padding:14px; border-radius:10px;
+  font-size:14px; font-weight:700;
+  cursor:pointer;
+  font-family:'Space Grotesk', sans-serif;
+  letter-spacing:1px;
+  transition:all 0.2s;
+}
+.loss-btn:hover { background:rgba(240,57,74,0.2); border-color:var(--red); box-shadow:0 0 20px rgba(240,57,74,0.2); }
+.reset-btn {
+  width:100%;
+  background:transparent;
+  border:1px solid var(--border2);
+  color:var(--text2);
+  padding:14px; border-radius:10px;
+  font-size:13px; font-weight:600;
+  cursor:pointer;
+  font-family:'Space Grotesk', sans-serif;
+  letter-spacing:1px;
+  transition:all 0.2s;
+}
+.reset-btn:hover { border-color:var(--text2); color:var(--text); }
+
+/* â”€â”€ STOP LOSS ALERT â”€â”€ */
+.stop-alert {
+  background:rgba(240,57,74,0.08);
+  border:1px solid #f0394a55;
+  border-radius:12px; padding:20px;
+  text-align:center; margin-bottom:16px;
+  display:none;
+}
+.stop-alert.visible { display:block; }
+.stop-alert-icon { font-size:32px; margin-bottom:8px; }
+.stop-alert-title { font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700; color:var(--red); letter-spacing:2px; margin-bottom:8px; }
+.stop-alert-msg { font-size:13px; color:var(--text3); line-height:1.6; }
+
+/* â”€â”€ SESSION HISTORY â”€â”€ */
+.history-section {
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:16px; padding:18px;
+  margin-bottom:18px;
+  display:none;
+}
+.history-section.visible { display:block; }
+.hist-row {
+  display:flex; align-items:center;
+  gap:10px; padding:9px 0;
+  border-bottom:1px solid var(--border);
+  flex-wrap:wrap;
+}
+.hist-row:last-child { border-bottom:none; }
+.hist-num { font-family:'JetBrains Mono', monospace; font-size:10px; color:var(--text2); min-width:22px; }
+.hist-outcome { font-family:'JetBrains Mono', monospace; font-size:11px; font-weight:700; min-width:55px; }
+.hist-amount { font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--gold); flex:1; }
+.hist-balance { font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--text3); }
+.hist-pnl { font-family:'JetBrains Mono', monospace; font-size:11px; font-weight:700; min-width:60px; text-align:right; }
+
+/* â”€â”€ GROWTH CHART â”€â”€ */
+.chart-wrap {
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:16px; padding:16px;
+  margin-bottom:18px;
+  display:none;
+}
+.chart-wrap.visible { display:block; }
+
+/* â”€â”€ STRATEGY INFO PANEL â”€â”€ */
+.info-panel {
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:12px; padding:16px;
+  margin-bottom:18px;
+}
+.info-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.info-item {
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:8px; padding:10px 12px;
+}
+.info-item-label { font-family:'JetBrains Mono', monospace; font-size:8px; letter-spacing:2px; color:var(--text2); margin-bottom:4px; }
+.info-item-val { font-size:12px; color:var(--text3); line-height:1.5; }
+
+/* â”€â”€ DISCLAIMER â”€â”€ */
+.disclaimer {
+  font-family:'JetBrains Mono', monospace;
+  font-size:9px; color:var(--text2);
+  text-align:center; line-height:1.7;
+  padding:12px; border:1px solid var(--border);
+  border-radius:8px;
+  background:rgba(240,57,74,0.03);
+}
+
+/* â”€â”€ ANIMATIONS â”€â”€ */
+@keyframes fadein { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+@keyframes pulse-gold { 0%,100%{box-shadow:0 0 0 0 rgba(240,180,41,0)} 50%{box-shadow:0 0 20px 4px rgba(240,180,41,0.15)} }
+.fade-in { animation:fadein 0.4s ease; }
+.pulse { animation:pulse-gold 2s infinite; }
+
+@keyframes spin { to{transform:rotate(360deg)} }
+.spinner { display:inline-block; width:14px; height:14px; border:2px solid #fff3; border-top:2px solid var(--gold); border-radius:50%; animation:spin 0.7s linear infinite; vertical-align:middle; margin-right:6px; }
+</style>
+<link rel="manifest" href="./manifest.json"/>
+<link rel="apple-touch-icon" href="./icons/icon-192.png"/>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-eyebrow">â—ˆ binary options â—ˆ</div>
+    <div class="header-title">RISK <span>MANAGER</span></div>
+    <div class="header-sub">SMART POSITION SIZING â€¢ ACCOUNT GROWTH</div>
+    <div class="header-glow"></div>
+  </div>
+
+  <!-- SETUP CARD -->
+  <div class="setup-card" id="setupCard">
+    <div class="card-title">â—ˆ Account Setup</div>
+
+    <div class="input-row">
+      <div class="input-group">
+        <div class="input-label">Deposit ($)</div>
+        <div class="input-prefix">
+          <input class="input-field" id="depositInput" type="number" min="1" value="100" placeholder="100"/>
+        </div>
+      </div>
+      <div class="input-group">
+        <div class="input-label">Payout (%)</div>
+        <input class="input-field" id="payoutInput" type="number" min="1" max="100" value="92" placeholder="92"/>
+      </div>
+    </div>
+
+    <div class="input-row">
+      <div class="input-group">
+        <div class="input-label">Target (%)</div>
+        <input class="input-field" id="targetInput" type="number" min="1" max="500" value="50" placeholder="50"/>
+      </div>
+      <div class="input-group">
+        <div class="input-label">Min Trade ($)</div>
+        <input class="input-field" id="minTradeInput" type="number" min="1" value="1" placeholder="1"/>
+      </div>
+    </div>
+    <div class="card-title" style="margin-top:4px;">â—ˆ Risk Strategy</div>
+    <div class="strategy-grid" id="strategyGrid">
+      <button class="strat-btn active" data-strat="conservative" onclick="selectStrat(this)">
+        <span class="strat-name">ðŸ›¡ Conservative</span>
+        <span class="strat-desc">1â€“2% per trade. Safest growth.</span>
+      </button>
+      <button class="strat-btn" data-strat="moderate" onclick="selectStrat(this)">
+        <span class="strat-name">âš– Moderate</span>
+        <span class="strat-desc">2â€“5% per trade. Balanced risk.</span>
+      </button>
+      <button class="strat-btn" data-strat="aggressive" onclick="selectStrat(this)">
+        <span class="strat-name">âš¡ Aggressive</span>
+        <span class="strat-desc">5â€“10% per trade. Fast growth.</span>
+      </button>
+      <button class="strat-btn" data-strat="martingale" onclick="selectStrat(this)">
+        <span class="strat-name">ðŸ”„ Anti-Martingale</span>
+        <span class="strat-desc">Double on WIN. Reset on loss.</span>
+      </button>
+    </div>
+
+    <button class="start-btn" onclick="startSession()">âš¡ START SESSION</button>
+  </div>
+
+  <!-- ACCOUNT STATUS BAR -->
+  <div class="account-bar" id="accountBar">
+    <div class="ab-row">
+      <div>
+        <div class="ab-label">CURRENT BALANCE</div>
+        <div class="ab-val" id="balanceVal">$100.00</div>
+      </div>
+      <div style="text-align:right">
+        <div class="ab-label">GROWTH</div>
+        <div class="ab-val" id="growthVal">+0.00%</div>
+      </div>
+    </div>
+    <div class="ab-progress-track">
+      <div class="ab-progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <div class="ab-meta">
+      <div class="ab-meta-item">Start: <span id="metaStart">$100</span></div>
+      <div class="ab-meta-item">Target: <span id="metaTarget">$150</span></div>
+      <div class="ab-meta-item">Trades: <span id="metaTrades">0</span></div>
+      <div class="ab-meta-item">W/L: <span id="metaWL">0/0</span></div>
+    </div>
+  </div>
+
+  <!-- TARGET ACHIEVED -->
+  <div class="stop-alert" id="targetAlert" style="background:rgba(34,208,122,0.08);border-color:#22d07a55;">
+    <div class="stop-alert-icon">ðŸ†</div>
+    <div class="stop-alert-title" style="color:var(--green)">TARGET REACHED!</div>
+    <div class="stop-alert-msg" id="targetAlertMsg">Congratulations! You hit your profit target. Consider withdrawing profits or starting a new session.</div>
+    <button class="reset-btn" style="margin-top:14px;" onclick="resetSession()">â†º Start New Session</button>
+  </div>
+
+  <!-- NEXT TRADE BOX -->
+  <div class="trade-box" id="tradeBox">
+    <div class="tb-header">
+      <div>
+        <div class="tb-label">NEXT TRADE AMOUNT</div>
+        <div class="tb-amount" id="tbAmount">$2.00</div>
+        <div class="tb-amount-sub" id="tbAmountSub">2.0% of balance</div>
+      </div>
+      <div class="tb-badge safe" id="tbBadge">SAFE</div>
+    </div>
+
+    <div class="tb-stats">
+      <div class="tb-stat">
+        <div class="tb-stat-label">IF WIN</div>
+        <div class="tb-stat-val" id="tbIfWin" style="color:var(--green)">+$1.84</div>
+      </div>
+      <div class="tb-stat">
+        <div class="tb-stat-label">IF LOSS</div>
+        <div class="tb-stat-val" id="tbIfLoss" style="color:var(--red)">-$2.00</div>
+      </div>
+      <div class="tb-stat">
+        <div class="tb-stat-label">RISK %</div>
+        <div class="tb-stat-val" id="tbRiskPct">2.0%</div>
+      </div>
+    </div>
+
+    <div class="tb-advice">
+      <div class="tb-advice-title">â—ˆ AI ADVICE</div>
+      <div class="tb-advice-text" id="tbAdvice">Loading recommendation...</div>
+    </div>
+
+    <div class="outcome-row" style="margin-bottom:10px;">
+      <button class="win-btn" onclick="recordOutcome('WIN')">âœ… WIN</button>
+      <button class="loss-btn" onclick="recordOutcome('LOSS')">âŒ LOSS</button>
+    </div>
+    <button class="reset-btn" onclick="resetSession()">â†º Reset Session</button>
+  </div>
+
+  <!-- GROWTH CHART -->
+  <div class="chart-wrap" id="chartWrap">
+    <div class="card-title">â—ˆ Balance Growth Curve</div>
+    <canvas id="growthChart" style="width:100%;display:block;" height="90"></canvas>
+  </div>
+
+  <!-- SESSION HISTORY -->
+  <div class="history-section" id="historySection">
+    <div class="card-title">â—ˆ Session History</div>
+    <div id="historyList"></div>
+  </div>
+
+  <!-- STRATEGY INFO -->
+  <div class="info-panel" id="infoPanel" style="display:none;">
+    <div class="card-title">â—ˆ Strategy Rules</div>
+    <div class="info-grid" id="infoGrid"></div>
+  </div>
+
+  <div class="disclaimer">
+    âš  FOR EDUCATIONAL USE ONLY â€” This tool provides position sizing guidance based on mathematical risk models. Past results do not guarantee future performance. Binary options carry extreme risk of capital loss. Always trade responsibly.
+  </div>
+
+</div>
+
+<script>
+// â”€â”€ STATE â”€â”€
+let state = {
+  active: false,
+  deposit: 100,
+  balance: 100,
+  payout: 92,
+  targetPct: 50,
+  strategy: 'conservative',
+  trades: [],
+  consecutiveWins: 0,
+  consecutiveLosses: 0,
+  baseTradeAmount: 2,
+  currentTradeAmount: 2,
+  balanceHistory: []
+};
+
+// â”€â”€ STRATEGY CONFIGS â”€â”€
+const STRATEGIES = {
+  conservative: {
+    name: 'ðŸ›¡ Conservative',
+    basePct: 1.5,
+    maxPct: 2,
+    onWin: (s) => s.basePct,           // reset to base on win
+    onLoss: (s, pct) => Math.min(pct * 1.2, s.maxPct), // tiny increase on loss
+    rules: [
+      { label: 'Base Risk', val: '1.5% per trade' },
+      { label: 'Max Risk', val: '2% per trade' },
+      { label: 'After WIN', val: 'Keep base amount' },
+      { label: 'After LOSS', val: 'Tiny +20% increase' },
+      { label: 'Best For', val: 'Long-term growth' },
+      { label: 'Max Loss/Trade', val: '1.5% of balance' },
+    ]
+  },
+  moderate: {
+    name: 'âš– Moderate',
+    basePct: 3,
+    maxPct: 5,
+    onWin: (s) => s.basePct,
+    onLoss: (s, pct) => Math.min(pct * 1.5, s.maxPct),
+    rules: [
+      { label: 'Base Risk', val: '3% per trade' },
+      { label: 'Max Risk', val: '5% per trade' },
+      { label: 'After WIN', val: 'Reset to base' },
+      { label: 'After LOSS', val: '+50% increase (capped)' },
+      { label: 'Best For', val: 'Balanced growth' },
+      { label: 'Max Loss/Trade', val: '3% of balance' },
+    ]
+  },
+  aggressive: {
+    name: 'âš¡ Aggressive',
+    basePct: 7,
+    maxPct: 10,
+    onWin: (s) => s.basePct,
+    onLoss: (s, pct) => Math.min(pct * 1.8, s.maxPct),
+    rules: [
+      { label: 'Base Risk', val: '7% per trade' },
+      { label: 'Max Risk', val: '10% per trade' },
+      { label: 'After WIN', val: 'Reset to base' },
+      { label: 'After LOSS', val: '+80% increase (capped)' },
+      { label: 'Best For', val: 'Fast account growth' },
+      { label: 'Max Loss/Trade', val: '7% of balance' },
+    ]
+  },
+  martingale: {
+    name: 'ðŸ”„ Anti-Martingale',
+    basePct: 2,
+    maxPct: 8,
+    onWin: (s, pct) => Math.min(pct * 2, s.maxPct), // double on win
+    onLoss: (s) => s.basePct,                         // reset to base on loss
+    rules: [
+      { label: 'Base Risk', val: '2% per trade' },
+      { label: 'Max Risk', val: '8% per trade' },
+      { label: 'After WIN', val: 'DOUBLE the amount!' },
+      { label: 'After LOSS', val: 'Reset to base 2%' },
+      { label: 'Best For', val: 'Ride winning streaks' },
+      { label: 'Max Loss/Trade', val: '2% base of balance' },
+    ]
+  }
+};
+
+let selectedStrat = 'conservative';
+
+function selectStrat(el) {
+  document.querySelectorAll('.strat-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  selectedStrat = el.dataset.strat;
+}
+
+// â”€â”€ START SESSION â”€â”€
+function startSession() {
+  const deposit = parseFloat(document.getElementById('depositInput').value) || 100;
+  const payout  = parseFloat(document.getElementById('payoutInput').value)  || 92;
+  const targPct = parseFloat(document.getElementById('targetInput').value)  || 50;
+
+  const strat = STRATEGIES[selectedStrat];
+  const minTrade = parseFloat(document.getElementById('minTradeInput').value) || 1;
+
+  state = {
+    active: true,
+    deposit, balance: deposit,
+    payout, targetPct: targPct, minTrade,
+    strategy: selectedStrat,
+    trades: [],
+    consecutiveWins: 0, consecutiveLosses: 0,
+    balanceHistory: [deposit],
+    currentPct: strat.basePct,
+  };
+  saveState();
+
+  // Hide setup, show panels
+  document.getElementById('setupCard').style.display = 'none';
+  document.getElementById('accountBar').classList.add('visible');
+  document.getElementById('tradeBox').classList.add('visible');
+  document.getElementById('infoPanel').style.display = 'block';
+
+  updateAccountBar();
+  computeNextTrade();
+  renderStrategyInfo();
+}
+
+// â”€â”€ COMPUTE NEXT TRADE â”€â”€
+function computeNextTrade() {
+  const strat = STRATEGIES[state.strategy];
+  const bal = state.balance;
+  const pct = state.currentPct;
+  const minT = state.minTrade || 1;
+  const amount = Math.max(minT, parseFloat((bal * pct / 100).toFixed(2)));
+  const profit = parseFloat((amount * state.payout / 100).toFixed(2));
+  const riskPct = (amount / bal * 100).toFixed(1);
+
+  // Determine risk level
+  let level = 'safe';
+  if (pct >= 5) level = 'danger';
+  else if (pct >= 3) level = 'caution';
+
+  // Check target only (no stop loss in binary options)
+  const targetLevel = state.deposit * (1 + state.targetPct / 100);
+  if (bal >= targetLevel) { triggerTarget(); return; }
+
+  // Build advice
+  const advice = buildAdvice(pct, level, profit, amount);
+
+  // Update UI
+  document.getElementById('tbAmount').textContent = '$' + amount.toFixed(2);
+  document.getElementById('tbAmountSub').textContent = riskPct + '% of $' + bal.toFixed(2);
+  document.getElementById('tbIfWin').textContent = '+$' + profit.toFixed(2);
+  document.getElementById('tbIfLoss').textContent = '-$' + amount.toFixed(2);
+  document.getElementById('tbRiskPct').textContent = riskPct + '%';
+  document.getElementById('tbAdvice').textContent = advice;
+
+  const box = document.getElementById('tradeBox');
+  const badge = document.getElementById('tbBadge');
+  box.className = 'trade-box visible ' + level;
+  badge.className = 'tb-badge ' + level;
+  badge.textContent = level.toUpperCase();
+
+  // Color the amount based on level
+  const amtColors = { safe: '#f0b429', caution: '#f0b429', danger: '#f0394a' };
+  document.getElementById('tbAmount').style.color = amtColors[level];
+
+  state._nextAmount = amount;
+}
+
+function buildAdvice(pct, level, profit, amount) {
+  const strat = STRATEGIES[state.strategy];
+  const w = state.consecutiveWins;
+  const l = state.consecutiveLosses;
+  const bal = state.balance;
+  const stopLevel = state.deposit * (1 - state.stopLossPct / 100);
+  const distToStop = ((bal - stopLevel) / state.deposit * 100).toFixed(1);
+
+  if (l >= 3) return `âš ï¸ ${l} losses in a row. In binary trading each loss is 100% of trade amount â€” SKIP this trade! Wait for a very strong signal or stop for today.`;
+  if (w >= 3 && state.strategy === 'martingale') return `ðŸ”¥ ${w} wins in a row! Amount doubled to $${amount.toFixed(2)}. Consider taking some profits soon.`;
+  if (w >= 2) return `âœ… ${w} consecutive wins. Momentum is good. Stick to the plan, do not increase risk manually.`;
+  if (level === 'danger') return `âš¡ High risk trade at ${pct.toFixed(1)}% of balance. Only enter on strong signal with 2+ indicator confirmation.`;
+  if (level === 'caution') return `âš– Medium risk at ${pct.toFixed(1)}%. Acceptable if your signal confidence is above 70%.`;
+  if (distToStop < 10) return `ðŸ›‘ WARNING: Only ${distToStop}% above your daily loss limit ($${stopLevel.toFixed(2)}). In binary options each trade is full risk â€” consider stopping for today.`;
+  return `âœ… Safe trade size at ${pct.toFixed(1)}% of balance. Good risk management. Enter on a clear signal only.`;
+}
+
+// â”€â”€ RECORD OUTCOME â”€â”€
+function recordOutcome(outcome) {
+  const strat = STRATEGIES[state.strategy];
+  const amount = state._nextAmount || (state.balance * strat.basePct / 100);
+  const profit = parseFloat((amount * state.payout / 100).toFixed(2));
+  const pnl = outcome === 'WIN' ? profit : -amount;
+  const prevBal = state.balance;
+
+  state.balance = parseFloat((state.balance + pnl).toFixed(2));
+  if (state.balance < 0) state.balance = 0;
+
+  // Update streaks
+  if (outcome === 'WIN') { state.consecutiveWins++; state.consecutiveLosses = 0; }
+  else                   { state.consecutiveLosses++; state.consecutiveWins = 0; }
+
+  // Compute next pct based on strategy
+  const curPct = state.currentPct;
+  if (outcome === 'WIN') state.currentPct = strat.onWin(strat, curPct);
+  else                   state.currentPct = strat.onLoss(strat, curPct);
+  state.currentPct = parseFloat(state.currentPct.toFixed(2));
+
+  // Record trade
+  state.trades.push({
+    num: state.trades.length + 1,
+    outcome, amount, pnl,
+    balance: state.balance,
+    pct: curPct
+  });
+  state.balanceHistory.push(state.balance);
+
+  saveState();
+  updateAccountBar();
+  renderHistory();
+  renderGrowthChart();
+  computeNextTrade();
+}
+
+// â”€â”€ ACCOUNT BAR â”€â”€
+function updateAccountBar() {
+  const growth = ((state.balance - state.deposit) / state.deposit * 100).toFixed(2);
+  const targetBal = state.deposit * (1 + state.targetPct / 100);
+  const progress = Math.min(100, Math.max(0, ((state.balance - state.deposit) / (targetBal - state.deposit)) * 100));
+  const wins = state.trades.filter(t => t.outcome === 'WIN').length;
+  const losses = state.trades.length - wins;
+
+  document.getElementById('balanceVal').textContent = '$' + state.balance.toFixed(2);
+  const gEl = document.getElementById('growthVal');
+  gEl.textContent = (growth >= 0 ? '+' : '') + growth + '%';
+  gEl.className = 'ab-val ' + (growth >= 0 ? 'up' : 'down');
+  document.getElementById('progressFill').style.width = progress + '%';
+  document.getElementById('metaStart').textContent = '$' + state.deposit.toFixed(2);
+  document.getElementById('metaTarget').textContent = '$' + targetBal.toFixed(2);
+  document.getElementById('metaTrades').textContent = state.trades.length;
+  document.getElementById('metaWL').textContent = wins + '/' + losses;
+}
+
+// â”€â”€ TARGET â”€â”€
+function triggerTarget() {
+  document.getElementById('tradeBox').classList.remove('visible');
+  document.getElementById('targetAlert').classList.add('visible');
+  const growth = ((state.balance - state.deposit) / state.deposit * 100).toFixed(1);
+  document.getElementById('targetAlertMsg').textContent =
+    `You grew your account from $${state.deposit.toFixed(2)} to $${state.balance.toFixed(2)} â€” a ${growth}% gain in ${state.trades.length} trades! Lock in your profits.`;
+}
+
+// â”€â”€ RENDER HISTORY â”€â”€
+function renderHistory() {
+  const sec = document.getElementById('historySection');
+  const list = document.getElementById('historyList');
+  sec.classList.add('visible');
+
+  list.innerHTML = [...state.trades].reverse().slice(0, 20).map(t => {
+    const c = t.outcome === 'WIN' ? '#22d07a' : '#f0394a';
+    const ico = t.outcome === 'WIN' ? 'âœ…' : 'âŒ';
+    const sign = t.pnl >= 0 ? '+' : '';
+    return `<div class="hist-row">
+      <span class="hist-num">#${t.num}</span>
+      <span class="hist-outcome" style="color:${c}">${ico} ${t.outcome}</span>
+      <span class="hist-amount">$${t.amount.toFixed(2)} <span style="color:var(--text2);font-size:9px;">(${t.pct.toFixed(1)}%)</span></span>
+      <span class="hist-balance">$${t.balance.toFixed(2)}</span>
+      <span class="hist-pnl" style="color:${c}">${sign}$${Math.abs(t.pnl).toFixed(2)}</span>
+    </div>`;
+  }).join('');
+}
+
+// â”€â”€ GROWTH CHART â”€â”€
+function renderGrowthChart() {
+  const wrap = document.getElementById('chartWrap');
+  wrap.classList.add('visible');
+  const canvas = document.getElementById('growthChart');
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.parentElement.clientWidth || 480;
+  const H = 90;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const pts = state.balanceHistory;
+  if (pts.length < 2) return;
+
+  ctx.fillStyle = '#0d1220'; ctx.fillRect(0, 0, W, H);
+
+  const min = Math.min(...pts) * 0.995;
+  const max = Math.max(...pts) * 1.005;
+  const range = max - min || 1;
+  const pad = { t:10, r:10, b:18, l:10 };
+  const cw = W - pad.l - pad.r, ch = H - pad.t - pad.b;
+  const toX = i => pad.l + (i / (pts.length - 1)) * cw;
+  const toY = v => pad.t + ch - ((v - min) / range) * ch;
+
+  // Target & baseline
+  const targY = toY(state.deposit * (1 + state.targetPct / 100));
+  const baseY = toY(state.deposit);
+
+  ctx.setLineDash([3,3]);
+  ctx.strokeStyle = '#22d07a44'; ctx.lineWidth = 0.8;
+  ctx.beginPath(); ctx.moveTo(pad.l, targY); ctx.lineTo(W-pad.r, targY); ctx.stroke();
+  ctx.strokeStyle = '#f0b42933';
+  ctx.beginPath(); ctx.moveTo(pad.l, baseY); ctx.lineTo(W-pad.r, baseY); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Labels
+  ctx.font = '7px JetBrains Mono'; ctx.fillStyle = '#22d07a88'; ctx.textAlign = 'left';
+  ctx.fillText('TARGET', pad.l + 2, targY - 2);
+
+  const lastVal = pts[pts.length - 1];
+  const lineColor = lastVal >= state.deposit ? '#22d07a' : '#f0394a';
+
+  // Gradient fill
+  const grad = ctx.createLinearGradient(0, pad.t, 0, H - pad.b);
+  grad.addColorStop(0, lastVal >= state.deposit ? 'rgba(34,208,122,0.2)' : 'rgba(240,57,74,0.2)');
+  grad.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.beginPath();
+  pts.forEach((v, i) => i === 0 ? ctx.moveTo(toX(i), toY(v)) : ctx.lineTo(toX(i), toY(v)));
+  ctx.lineTo(toX(pts.length-1), H-pad.b); ctx.lineTo(toX(0), H-pad.b);
+  ctx.closePath(); ctx.fillStyle = grad; ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  pts.forEach((v, i) => i === 0 ? ctx.moveTo(toX(i), toY(v)) : ctx.lineTo(toX(i), toY(v)));
+  ctx.strokeStyle = lineColor; ctx.lineWidth = 2; ctx.stroke();
+
+  // End dot
+  const ex = toX(pts.length-1), ey = toY(lastVal);
+  ctx.beginPath(); ctx.arc(ex, ey, 3.5, 0, Math.PI*2);
+  ctx.fillStyle = lineColor; ctx.fill();
+
+  // Balance label
+  ctx.fillStyle = lineColor; ctx.font = 'bold 8px JetBrains Mono'; ctx.textAlign = 'right';
+  ctx.fillText('$' + lastVal.toFixed(2), W - pad.r - 2, ey - 5);
+}
+
+// â”€â”€ STRATEGY INFO â”€â”€
+function renderStrategyInfo() {
+  const strat = STRATEGIES[state.strategy];
+  document.getElementById('infoGrid').innerHTML = strat.rules.map(r => `
+    <div class="info-item">
+      <div class="info-item-label">${r.label}</div>
+      <div class="info-item-val">${r.val}</div>
+    </div>`).join('');
+}
+
+// â”€â”€ RESET â”€â”€
+function resetSession() {
+  document.getElementById('setupCard').style.display = 'block';
+  document.getElementById('accountBar').classList.remove('visible');
+  document.getElementById('tradeBox').classList.remove('visible');
+  document.getElementById('historySection').classList.remove('visible');
+  document.getElementById('chartWrap').classList.remove('visible');
+  document.getElementById('targetAlert').classList.remove('visible');
+  document.getElementById('infoPanel').style.display = 'none';
+  state.active = false;
+  if (db) { try { const tx=db.transaction('session','readwrite'); tx.objectStore('session').delete('current'); } catch(e){} }
+}
+
+
+// â”€â”€ INDEXEDDB PERSISTENT STORAGE â”€â”€
+let db = null;
+
+function initDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open('RiskManagerDB', 1);
+    req.onupgradeneeded = e => {
+      const d = e.target.result;
+      if (!d.objectStoreNames.contains('session')) {
+        d.createObjectStore('session', { keyPath: 'id' });
+      }
+    };
+    req.onsuccess = e => { db = e.target.result; resolve(); };
+    req.onerror = () => { resolve(); }; // fail silently
+  });
+}
+
+function saveState() {
+  if (!db || !state.active) return;
+  try {
+    const tx = db.transaction('session', 'readwrite');
+    tx.objectStore('session').put({ id: 'current', ...state });
+  } catch(e) {}
+}
+
+function loadState() {
+  return new Promise(resolve => {
+    if (!db) { resolve(); return; }
+    try {
+      const tx = db.transaction('session', 'readonly');
+      const req = tx.objectStore('session').get('current');
+      req.onsuccess = () => {
+        const saved = req.result;
+        if (saved && saved.active) {
+          // restore state
+          state = { ...state, ...saved };
+          delete state.id;
+          // restore UI
+          document.getElementById('setupCard').style.display = 'none';
+          document.getElementById('accountBar').classList.add('visible');
+          document.getElementById('tradeBox').classList.add('visible');
+          document.getElementById('infoPanel').style.display = 'block';
+          // restore form values
+          document.getElementById('depositInput').value = state.deposit;
+          document.getElementById('payoutInput').value = state.payout;
+          document.getElementById('targetInput').value = state.targetPct;
+          document.getElementById('minTradeInput').value = state.minTrade || 1;
+          // restore strategy button
+          document.querySelectorAll('.strat-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.strat === state.strategy);
+          });
+          updateAccountBar();
+          renderHistory();
+          renderGrowthChart();
+          renderStrategyInfo();
+          computeNextTrade();
+        }
+        resolve();
+      };
+      req.onerror = () => resolve();
+    } catch(e) { resolve(); }
+  });
+}
+
+// Boot with DB
+initDB().then(() => loadState());
+
+window.addEventListener('resize', () => { if (state.active && state.balanceHistory.length > 1) renderGrowthChart(); });
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
+
